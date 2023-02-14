@@ -1,0 +1,85 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        .content {
+            text-align: center;
+            padding: 30px;
+            margin: 0px auto;
+        }
+
+        .details {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table,
+        td {
+            border-collapse: collapse;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <h2>Random User's Details</h2>
+        <div class="details">
+            <table id="content">
+                <tr>
+                    <th>Image</th>
+                    <th>Full Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Location</th>
+                    <th>Country</th>
+                </tr>
+
+            </table>
+
+        </div>
+    </div>
+    <script>
+        const api_url = "https://randomuser.me/api/";
+        for (i = 0; i < 10; i++) {
+            document.getElementById("content").innerHTML += "<tr><td><span id=\"image" + i + "\"></span></td><td><span id=\"fullname" + i + "\"></span></td><td><span id=\"age" + i + "\"></span></td><td><span id=\"gender" + i + "\"></span></td><td><span id=\"location" + i + "\"></span></td><td><span id=\"country" + i + "\"></span></td>";
+        }
+        async function getUser() {
+            for (i = 0; i < 10; i++) {
+                //making a call to API
+                const response = await fetch(api_url);
+                // converting it to JSON format
+                const data = await response.json();
+                // getting data/information from JSON
+                const user = data.results[0];
+                let { first, last } = user.name;
+                let { gender, email, phone } = user;
+                let age = user.dob.age;
+                let { city, state, country } = user.location;
+                let fullName = first + " " + last;
+                let thumbnailRef = user.picture.thumbnail;
+                // getting access to the span container
+                document.getElementById("image" + i).innerHTML = "<img src='" + thumbnailRef + "'>";
+                document.querySelector("#fullname" + i).textContent = fullName;
+                document.querySelector("#age" + i).textContent = age;
+                document.querySelector("#gender" + i).textContent = gender;
+                document.querySelector("#location" + i).textContent = city + ", " + state;
+                document.querySelector("#country" + i).textContent = country;
+            }
+        }
+        // Calling the getUser() function
+        getUser();
+    </script>
+    <p id="demo">JavaScript can change HTML content.</p><button type="button" onclick='getUser()'>
+        Change!</button>
+    <button type="button" onclick="document.getElementById('demo').style.display='none'">Hide!</button>
+    <button type="button" onclick="document.getElementById('demo').style.display='block'">Show!</button>
+</body>
+
+</html>
